@@ -5,7 +5,7 @@ defmodule NflRushingWeb.PageLiveTest do
 
   test "disconnected and connected render", %{conn: conn} do
     {:ok, page_live, disconnected_html} = live(conn, "/")
-    assert disconnected_html =~ "Hello :)"
-    assert render(page_live) =~ "Hello :)"
+    assert disconnected_html =~ "<h2 class=\"text-2xl font-semibold\">Players</h2>"
+    assert render(page_live) =~ "<h2 class=\"text-2xl font-semibold\">Players</h2>"
   end
 end

@@ -11,11 +11,13 @@
   </head>
   <body>
     <header>
-      <section class="container">
-        <a href="https://www.thescore.com" class="phx-logo">
-          <img src="<%= Routes.static_path(@conn, "/images/thescore.png") %>" alt="The Score Logo"/>
-        </a>
-      </section>
+      <nav class="bg-gray-800 py-4">
+        <div class="container px-4">
+            <a href="https://www.thescore.com" target="_blank">
+              <img class="max-h-4" src="<%= Routes.static_path(@conn, "/images/thescore.png") %>" alt="The Score Logo"/>
+            </a>
+        </div>
+      </nav>
     </header>
     <%= @inner_content %>
   </body>
