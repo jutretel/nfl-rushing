@@ -1,37 +1,52 @@
-<div class="py-8">
-    <h2 class="text-2xl font-semibold">Players</h2>
+<div id="players" class="py-4 px-4">
+    <div class="mb-4 flex items-center justify-center">
+        <h1 class="text-3xl font-semibold">Players</h1>
+    </div>
 
-    <div class="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
-        <div class="inline-block min-w-full shadow-md rounded-lg overflow-hidden">
+    <div class="mb-4">
+        <form phx-submit="search_player" class="grid grid-cols-12 gap-1">
+            <input value="<%= @player %>" autofocus autocomplete="off" name="player" type="text" class="px-4 py-2 border rounded md:col-start-4 md:col-span-5 col-span-11" placeholder="Search by player's name...">
+            <button type="submit" class="px-4 bg-yellow-400 rounded col-span-1 flex justify-center items-center">
+                <svg class="h-4 w-4 text-white" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M16.32 14.9l5.39 5.4a1 1 0 0 1-1.42 1.4l-5.38-5.38a8 8 0 1 1 1.41-1.41zM10 16a6 6 0 1 0 0-12 6 6 0 0 0 0 12z"/></svg>
+            </button>
+        </form>
+    </div>
+
+    <div class="mb-4 grid grid-cols-12">
+        <div class="shadow-md rounded-lg md:col-start-2 md:col-span-10 col-span-12">
+            <%= if @empty_list do %>
+            <p class="p-3 bg-gray-100 text-center text-sm font-semibold text-gray-700">No players found for <b><%= @player %></b> :(</p>
+            <% else %>
             <table class="min-w-full leading-normal">
                 <thead>
                 <tr class="bg-gray-100 border-b-2 border-gray-300 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
-                    <th class="px-3 py-3">Player</th>
-                    <th class="px-3 py-3 text-right">Total Rushing Yards</th>
-                    <th class="px-3 py-3 text-right">Longest Rush</th>
-                    <th class="px-3 py-3 text-right">Total Rushing Touchdowns</th>
+                    <th class="p-3">Player</th>
+                    <th class="p-3 text-right">Total Rushing Yards</th>
+                    <th class="p-3 text-right">Longest Rush</th>
+                    <th class="p-3 text-right">Total Rushing Touchdowns</th>
                 </tr>
                 </thead>
                 <tbody>
                 <%= for player <- @players do %>
                 <tr class="border-b border-gray-100 bg-white text-sm text-gray-900">
-                    <td class="px-3 py-3">
+                    <td class="p-3">
                         <p class="whitespace-no-wrap"><%= player["Player"] %></p>
                         <p class="text-yellow-400 whitespace-no-wrap"><%= player["Team"] %></p>
                     </td>
-                    <td class="px-3 py-3 text-base text-right">
+                    <td class="p-3 text-base text-right">
                         <p class="whitespace-no-wrap"><%= player["Yds"] %></p>
                     </td>
-                    <td class="px-3 py-3 text-base text-right">
+                    <td class="p-3 text-base text-right">
                         <p class="whitespace-no-wrap"><%= player["Lng"] %></p>
                     </td>
-                    <td class="px-3 py-3 text-base text-right">
+                    <td class="p-3 text-base text-right">
                         <p class="whitespace-no-wrap"><%= player["TD"] %></p>
                     </td>
                 </tr>
                 <% end %>
                 </tbody>
             </table>
+            <% end %>
         </div>
     </div>
 </div>

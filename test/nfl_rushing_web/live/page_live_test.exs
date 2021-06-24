@@ -3,9 +3,22 @@ defmodule NflRushingWeb.PageLiveTest do
 
   import Phoenix.LiveViewTest
 
-  test "disconnected and connected render", %{conn: conn} do
+  test "search by player name filters dataset", %{conn: conn} do
     {:ok, page_live, disconnected_html} = live(conn, "/")
-    assert disconnected_html =~ "<h2 class=\"text-2xl font-semibold\">Players</h2>"
-    assert render(page_live) =~ "<h2 class=\"text-2xl font-semibold\">Players</h2>"
+
+    assert disconnected_html =~ "Shaun Hill"
+    assert disconnected_html =~ "Joe Banyard"
+
+    assert render_submit(page_live, :search_player, %{"player" => "shaun"}) =~ "Shaun Hill"
+    refute render_submit(page_live, :search_player, %{"player" => "shaun"}) =~ "Joe Banyard"
+  end
+
+  test "search by player name with no match shows message", %{conn: conn} do
+    {:ok, page_live, disconnected_html} = live(conn, "/")
+
+    assert disconnected_html =~ "Shaun Hill"
+    assert disconnected_html =~ "Joe Banyard"
+
+    assert render_submit(page_live, :search_player, %{"player" => "blablabla"}) =~ "No players found for <b>blablabla</b> :("
   end
 end
