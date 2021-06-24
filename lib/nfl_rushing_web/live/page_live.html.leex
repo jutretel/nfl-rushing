@@ -38,6 +38,9 @@
                     </td>
                     <td class="p-3 text-base text-right">
                         <p class="whitespace-no-wrap"><%= player["Lng"] %></p>
+                        <%= if player["TLng"] do %>
+                        <span class="inline-flex items-center justify-center p-1 text-tiny leading-none text-white bg-yellow-400 rounded">TD</span>
+                        <% end %>
                     </td>
                     <td class="p-3 text-base text-right">
                         <p class="whitespace-no-wrap"><%= player["TD"] %></p>

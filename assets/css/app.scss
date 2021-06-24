@@ -4,6 +4,10 @@
 
 @tailwind utilities;
 
+.text-tiny {
+  font-size: .4rem;
+}
+
 /* LiveView specific classes for your customizations */
 .phx-no-feedback.invalid-feedback,
 .phx-no-feedback .invalid-feedback {
