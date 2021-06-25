@@ -29,4 +29,18 @@ defmodule NflRushingWeb.PlayersTest do
       assert filtered["Player"] == "Shaun Hill"
     end
   end
+
+  describe "sorting by" do
+    test "should sort by total rushing yards" do
+      assert Players.sort_by(:yds) |> Enum.map(&(&1["Yds"])) == [2, 5, 7]
+    end
+
+    test "should sort by longest rush" do
+      assert Players.sort_by(:lng) |> Enum.map(&(&1["Lng"])) == [-2, 7, 9]
+    end
+
+    test "should sort by total rushing touchdowns" do
+      assert Players.sort_by(:td) |> Enum.map(&(&1["TD"])) == [0, 1, 4]
+    end
+  end
 end

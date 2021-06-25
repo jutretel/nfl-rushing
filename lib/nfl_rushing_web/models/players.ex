@@ -12,7 +12,11 @@ defmodule NflRushingWeb.Players do
       player["Player"] |> String.downcase() |> String.contains?(name)
     end)
   end
-  
+
+  def sort_by(:yds), do: get_all() |> Enum.sort(&(&1["Yds"] <= &2["Yds"]))
+  def sort_by(:lng), do: get_all() |> Enum.sort(&(&1["Lng"] <= &2["Lng"]))
+  def sort_by(:td), do: get_all() |> Enum.sort(&(&1["TD"] <= &2["TD"]))
+
   defp normalize(players) do
     players
     |> Enum.map(fn player ->
