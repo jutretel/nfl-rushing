@@ -1,31 +1,45 @@
 defmodule NflRushingWeb.Players do
-  def get_all() do
+  @doc """
+  Get all players matching the given criteria.
+  The available types of criteria are: `search` and `sort`.
+
+  Example:
+
+  [search_by: ["Player": "name"], sort_by: ["Yds", "Lng"]]
+  """
+  def get_all(criteria \\ []) do
     file_path = Application.get_env(:nfl_rushing, :data_source_path, "")
     content = File.read!(file_path)
-    Jason.decode!(content) |> normalize() 
+
+    search_by = criteria[:search_by] || []
+    sort_by = criteria[:sort_by] || ["Player"]
+
+    Jason.decode!(content)
+    |> Stream.filter(&apply_filters(search_by, &1))
+    |> Stream.map(&normalize/1)
+    |> Enum.sort_by(&apply_sorters(sort_by, &1))
   end
 
-  def search_by_name(name) do
-    get_all()
-    |> Enum.filter(fn player ->
-      name = name |> String.downcase()
-      player["Player"] |> String.downcase() |> String.contains?(name)
+  defp apply_filters(filters, player) do
+    filters = Enum.map(filters, fn
+      {:Player, expected} -> contains?(player["Player"], expected)
+      {key, _} -> raise "Filter not implemented for #{key}"
     end)
+
+    Enum.all?(filters)
   end
 
-  def sort_by(:yds), do: get_all() |> Enum.sort(&(&1["Yds"] <= &2["Yds"]))
-  def sort_by(:lng), do: get_all() |> Enum.sort(&(&1["Lng"] <= &2["Lng"]))
-  def sort_by(:td), do: get_all() |> Enum.sort(&(&1["TD"] <= &2["TD"]))
+  defp contains?(string1, string2), do: String.contains?(String.downcase(string1), String.downcase(string2))
 
-  defp normalize(players) do
-    players
-    |> Enum.map(fn player ->
-      rush_info = %{
-        "Lng" => longest_rush_to_int(player["Lng"]),
-        "TLng" => longest_rush_touchdown(player["Lng"]),
-      }
-      Map.merge(player, rush_info)
-    end)
+  defp apply_sorters(sorters, player), do: sorters |> Enum.map(&(player[&1])) |> List.to_tuple
+
+  defp normalize(player) do
+    rush_info = %{
+      "Lng" => longest_rush_to_int(player["Lng"]),
+      "TLng" => longest_rush_touchdown(player["Lng"]),
+    }
+
+    Map.merge(player, rush_info)
   end
 
   defp longest_rush_to_int(longest_rush) when is_binary(longest_rush), do: longest_rush |> String.replace("T", "") |> String.to_integer()

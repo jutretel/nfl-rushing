@@ -11,7 +11,7 @@ defmodule NflRushingWeb.PageLive do
   end
 
   def handle_event("search_player", %{"player" => player}, socket) do
-    case Players.search_by_name(player) do
+    case Players.get_all(search_by: ["Player": player]) do
       [] ->
         socket = assign(socket, player: player, players: [], empty_list: true)
         {:noreply, socket}

@@ -16,31 +16,53 @@ defmodule NflRushingWeb.PlayersTest do
         assert player["TLng"] |> is_boolean()
       end)
     end
+
+    test "should search and sort" do
+      result =
+        Players.get_all(search_by: ["Player": "Joe"], sort_by: ["Lng"])
+        |> Enum.map(&(&1["Lng"]))
+
+      assert result == [5, 7]
+    end
   end
 
   describe "searching by name" do
     test "should filter by name" do
-      [filtered] = Players.search_by_name("Shaun")
+      [filtered] = Players.get_all(search_by: ["Player": "Shaun"])
       assert filtered["Player"] == "Shaun Hill"
     end
 
     test "should be case insensitive" do
-      [filtered] = Players.search_by_name("shaun")
+      [filtered] = Players.get_all(search_by: ["Player": "shaun"])
       assert filtered["Player"] == "Shaun Hill"
+    end
+
+    test "should raise error for not implemented filter" do
+      assert_raise RuntimeError, "Filter not implemented for some random field", fn ->
+        Players.get_all(search_by: ["some random field": ""])
+      end
     end
   end
 
   describe "sorting by" do
     test "should sort by total rushing yards" do
-      assert Players.sort_by(:yds) |> Enum.map(&(&1["Yds"])) == [2, 5, 7]
+      assert Players.get_all(sort_by: ["Yds"]) |> Enum.map(&(&1["Yds"])) == [2, 5, 7, 7]
     end
 
     test "should sort by longest rush" do
-      assert Players.sort_by(:lng) |> Enum.map(&(&1["Lng"])) == [-2, 7, 9]
+      assert Players.get_all(sort_by: ["Lng"]) |> Enum.map(&(&1["Lng"])) == [-2, 5, 7, 9]
     end
 
     test "should sort by total rushing touchdowns" do
-      assert Players.sort_by(:td) |> Enum.map(&(&1["TD"])) == [0, 1, 4]
+      assert Players.get_all(sort_by: ["TD"]) |> Enum.map(&(&1["TD"])) == [0, 1, 4, 4]
+    end
+
+    test "should sort by more than one field" do
+      players_names =
+        Players.get_all(sort_by: ["TD", "Player"])
+        |> Enum.map(&(&1["Player"]))
+
+      assert players_names == ["Breshad Perriman", "Shaun Hill", "Joe Banyard", "Joe Banyard Junior"]
     end
   end
 end
