@@ -5,19 +5,23 @@ defmodule NflRushingWeb.PageLive do
 
   def mount(_params, _session, socket) do
     players = Players.get_all()
-    socket = assign(socket, players: players, player: "", empty_list: false)
+    sort_options = Players.sort_options()
+    options = %{player: "", sort_by: "Player"}
+
+    socket = assign(socket, players: players, sort_options: sort_options, user_options: options)
 
     {:ok, socket}
   end
 
-  def handle_event("search_player", %{"player" => player}, socket) do
-    case Players.get_all(search_by: ["Player": player]) do
+  def handle_event("search", %{"player" => player, "sort_by" => sort_by}, socket) do
+    Players.get_all(search_by: ["Player": player], sort_by: [sort_by])
+    |> case do
       [] ->
-        socket = assign(socket, player: player, players: [], empty_list: true)
+        socket = assign(socket, players: [], user_options: %{player: player, sort_by: sort_by})
         {:noreply, socket}
 
       players ->
-        socket = assign(socket, player: player, players: players, empty_list: false)
+        socket = assign(socket, players: players, user_options: %{player: player, sort_by: sort_by})
         {:noreply, socket}
     end
   end

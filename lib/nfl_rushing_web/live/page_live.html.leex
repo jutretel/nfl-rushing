@@ -4,8 +4,18 @@
     </div>
 
     <div class="mb-4">
-        <form phx-submit="search_player" class="grid grid-cols-12 gap-1">
-            <input value="<%= @player %>" autofocus autocomplete="off" name="player" type="text" class="px-4 py-2 border rounded md:col-start-4 md:col-span-5 col-span-11" placeholder="Search by player's name...">
+        <form phx-submit="search" class="grid grid-cols-12 gap-1">
+            <input value="<%= @user_options.player %>" autocomplete="off" name="player" type="text" class="px-4 py-2 border rounded md:col-start-2 md:col-span-5 col-span-6 focus:border-gray-500 focus:outline-none" placeholder="Search by player's name...">
+            <div class="relative md:col-span-4 col-span-5">
+                <select name="sort_by" class="appearance-none w-full border py-3 px-4 pr-8 rounded focus:outline-none focus:border-gray-500">
+                    <%= for {label, sort_by} <- @sort_options do %>
+                    <option value="<%= sort_by %>" <%= if sort_by == @user_options.sort_by, do: "selected" %>><%= label %></option>
+                    <% end %>
+                </select>
+                <div class="absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                    <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                </div>
+            </div>
             <button type="submit" class="px-4 bg-yellow-400 rounded col-span-1 flex justify-center items-center">
                 <svg class="h-4 w-4 text-white" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M16.32 14.9l5.39 5.4a1 1 0 0 1-1.42 1.4l-5.38-5.38a8 8 0 1 1 1.41-1.41zM10 16a6 6 0 1 0 0-12 6 6 0 0 0 0 12z"/></svg>
             </button>
@@ -14,8 +24,8 @@
 
     <div class="mb-4 grid grid-cols-12">
         <div class="shadow-md rounded-lg md:col-start-2 md:col-span-10 col-span-12">
-            <%= if @empty_list do %>
-            <p class="p-3 bg-gray-100 text-center text-sm font-semibold text-gray-700">No players found for <b><%= @player %></b> :(</p>
+            <%= if Enum.empty?(@players) do %>
+            <p class="p-3 bg-gray-100 text-center text-sm font-semibold text-gray-700">No players found for <b><%= @user_options.player %></b> :(</p>
             <% else %>
             <table class="min-w-full leading-normal">
                 <thead>

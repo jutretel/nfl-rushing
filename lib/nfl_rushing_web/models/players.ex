@@ -1,4 +1,13 @@
 defmodule NflRushingWeb.Players do
+  @sort_options %{
+    "Player": "Player",
+    "Total Rushing Yards": "Yds",
+    "Longest Rush": "Lng",
+    "Total Rushing Touchdowns": "TD",
+  }
+
+  def sort_options(), do: @sort_options
+
   @doc """
   Get all players matching the given criteria.
   The available types of criteria are: `search` and `sort`.
@@ -15,8 +24,8 @@ defmodule NflRushingWeb.Players do
     sort_by = criteria[:sort_by] || ["Player"]
 
     Jason.decode!(content)
-    |> Stream.filter(&apply_filters(search_by, &1))
     |> Stream.map(&normalize/1)
+    |> Stream.filter(&apply_filters(search_by, &1))
     |> Enum.sort_by(&apply_sorters(sort_by, &1))
   end
 
