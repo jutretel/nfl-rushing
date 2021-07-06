@@ -4,22 +4,40 @@
     </div>
 
     <div class="mb-4">
+        <div class="grid grid-cols-12 gap-1 uppercase text-gray-700 text-xs font-bold">
+            <p class="px-1 md:col-start-2 md:col-span-4 col-span-5">Search by</p>
+            <p class="px-1 md:col-span-4 col-span-5">Sort by</p>
+            <p class="px-1 md:col-span-1 col-span-2">Show per page</p>
+        </div>
         <form phx-submit="search" class="grid grid-cols-12 gap-1">
-            <input value="<%= @user_options.player %>" autocomplete="off" name="player" type="text" class="px-4 py-2 border rounded md:col-start-2 md:col-span-5 col-span-6 focus:border-gray-500 focus:outline-none" placeholder="Search by player's name...">
+            <input value="<%= @user_options.player %>" autocomplete="off" name="player" type="text" class="px-4 py-2 border rounded md:col-start-2 md:col-span-4 col-span-5 focus:border-gray-500 focus:outline-none" placeholder="Search by player's name...">
             <div class="relative md:col-span-4 col-span-5">
                 <select name="sort_by" class="appearance-none w-full border py-3 px-4 pr-8 rounded focus:outline-none focus:border-gray-500">
-                    <%= for {label, sort_by} <- @sort_options do %>
-                    <option value="<%= sort_by %>" <%= if sort_by == @user_options.sort_by, do: "selected" %>><%= label %></option>
-                    <% end %>
+                    <%= options_for_select(@sort_options, @user_options.sort_by) %>
                 </select>
                 <div class="absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
                     <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
                 </div>
             </div>
+            <div class="col-span-1">
+                <select name="page_size" class="appearance-none w-full border py-3 md:px-4 px-2 rounded focus:outline-none focus:border-gray-500">
+                    <%= options_for_select([10, 50, 100], @user_options.page_size) %>
+                </select>
+            </div>
             <button type="submit" class="px-4 bg-yellow-400 rounded col-span-1 flex justify-center items-center">
                 <svg class="h-4 w-4 text-white" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M16.32 14.9l5.39 5.4a1 1 0 0 1-1.42 1.4l-5.38-5.38a8 8 0 1 1 1.41-1.41zM10 16a6 6 0 1 0 0-12 6 6 0 0 0 0 12z"/></svg>
             </button>
         </form>
+    </div>
+
+    <div class="mb-4 grid grid-cols-12">
+        <div class="xl:col-start-11 xl:col-span-1 md:col-start-10 md:col-span-2 px-2 py-1 col-start-9 col-span-4 grid grid-cols-7 gap-1 bg-yellow-400 rounded text-white font-extralight">
+            <%= pagination_link @socket, "←", "col-span-1 text-center text-sm #{(if @user_options.page == 1, do: "cursor-not-allowed")}", max(@user_options.page - 1, 1), @user_options.page_size %>
+            <%= for page <- (@user_options.page - 2)..(@user_options.page + 2), page > 0 and page <= @total_pages do %>
+            <%= pagination_link @socket, page, "col-span-1 text-center text-sm #{(if page == @user_options.page, do: "font-bold")}", page, @user_options.page_size %>
+            <% end %>
+            <%= pagination_link @socket, "→", "col-span-1 text-center text-sm #{(if @user_options.page == @total_pages, do: "cursor-not-allowed")}", min(@user_options.page + 1, @total_pages), @user_options.page_size %>
+        </div>
     </div>
 
     <div class="mb-4 grid grid-cols-12">
@@ -92,6 +110,16 @@
                 </tbody>
             </table>
             <% end %>
+        </div>
+    </div>
+
+    <div class="mb-4 grid grid-cols-12">
+        <div class="xl:col-start-11 xl:col-span-1 md:col-start-10 md:col-span-2 px-2 py-1 col-start-9 col-span-4 grid grid-cols-7 gap-1 bg-yellow-400 rounded text-white font-extralight">
+            <%= pagination_link @socket, "←", "col-span-1 text-center text-sm #{(if @user_options.page == 1, do: "cursor-not-allowed")}", max(@user_options.page - 1, 1), @user_options.page_size %>
+            <%= for page <- (@user_options.page - 2)..(@user_options.page + 2), page > 0 and page <= @total_pages do %>
+            <%= pagination_link @socket, page, "col-span-1 text-center text-sm #{(if page == @user_options.page, do: "font-bold")}", page, @user_options.page_size %>
+            <% end %>
+            <%= pagination_link @socket, "→", "col-span-1 text-center text-sm #{(if @user_options.page == @total_pages, do: "cursor-not-allowed")}", min(@user_options.page + 1, @total_pages), @user_options.page_size %>
         </div>
     </div>
 </div>

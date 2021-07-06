@@ -10,7 +10,7 @@ defmodule NflRushingWeb.Players do
 
   @doc """
   Get all players matching the given criteria.
-  The available types of criteria are: `search` and `sort`.
+  The available types of criteria are: `search_by` and `sort_by`. Default to sort by player's name
 
   Example:
 
