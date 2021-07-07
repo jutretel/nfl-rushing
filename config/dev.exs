@@ -55,7 +55,7 @@ config :nfl_rushing, NflRushingWeb.Endpoint,
     ]
   ]
 
-config :nfl_rushing, :data_source_path, "rushing.json"
+config :nfl_rushing, :data_source_path, "rushing_10000.json"
 
 # Do not include metadata nor timestamps in development logs
 config :logger, :console, format: "[$level] $message\n"
