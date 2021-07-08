@@ -6,15 +6,21 @@ defmodule NflRushingWeb.Players do
     "Total Rushing Touchdowns": "TD",
   }
 
+  @order_options [:asc, :desc]
+
   def sort_options(), do: @sort_options
+  def order_options(), do: @order_options
 
   @doc """
   Get all players matching the given criteria.
-  The available types of criteria are: `search_by` and `sort_by`. Default to sort by player's name
+  The available types of criteria are:
+  - `search_by`: keyword list with the field to be searched as the key and the expected as value.
+  - `sort_by`: list with the fields to sort by. Default to sort by player's name.
+  - `order`: :asc or :desc to order.
 
   Example:
 
-  [search_by: ["Player": "name"], sort_by: ["Yds", "Lng"]]
+  [search_by: ["Player": "name"], sort_by: ["Yds", "Lng"], order: :asc]
   """
   def get_all(criteria \\ []) do
     file_path = Application.get_env(:nfl_rushing, :data_source_path, "")
@@ -22,12 +28,16 @@ defmodule NflRushingWeb.Players do
 
     search_by = criteria[:search_by] || []
     sort_by = criteria[:sort_by] || ["Player"]
+    order = sanitize_order(criteria[:order])
 
     Jason.decode!(content)
     |> Stream.map(&normalize/1)
     |> Stream.filter(&apply_filters(search_by, &1))
-    |> Enum.sort_by(&apply_sorters(sort_by, &1))
+    |> Enum.sort_by(&apply_sorters(sort_by, &1), order)
   end
+
+  defp sanitize_order(order) when order in @order_options, do: order
+  defp sanitize_order(_), do: :asc
 
   defp apply_filters(filters, player) do
     filters = Enum.map(filters, fn

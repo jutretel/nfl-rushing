@@ -9,7 +9,7 @@ defmodule NflRushingWeb.PageLiveTest do
     assert disconnected_html =~ "Shaun Hill"
     assert disconnected_html =~ "Joe Banyard"
 
-    connected_html = render_submit(page_live, :search, %{"player" => "shaun", "sort_by" => "", "page_size" => "10"})
+    connected_html = render_submit(page_live, :search, %{"player" => "shaun", "sort_by" => "", "page_size" => "10", "order" => "asc"})
 
     assert connected_html =~ "Shaun Hill"
     refute connected_html =~ "Joe Banyard"
@@ -21,6 +21,6 @@ defmodule NflRushingWeb.PageLiveTest do
     assert disconnected_html =~ "Shaun Hill"
     assert disconnected_html =~ "Joe Banyard"
 
-    assert render_submit(page_live, :search, %{"player" => "blablabla", "sort_by" => "", "page_size" => "10"}) =~ "No players found for <b>blablabla</b> :("
+    assert render_submit(page_live, :search, %{"player" => "blablabla", "sort_by" => "", "page_size" => "10", "order" => "asc"}) =~ "No players found for <b>blablabla</b> :("
   end
 end

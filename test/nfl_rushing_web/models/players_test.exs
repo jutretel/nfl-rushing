@@ -64,5 +64,17 @@ defmodule NflRushingWeb.PlayersTest do
 
       assert players_names == ["Breshad Perriman", "Shaun Hill", "Joe Banyard", "Joe Banyard Junior"]
     end
+
+    test "should sort if :asc is passed" do
+      assert Players.get_all(sort_by: ["Lng"], order: :asc) |> Enum.map(&(&1["Lng"])) == [-2, 5, 7, 9]
+    end
+
+    test "should sort if :desc is passed" do
+      assert Players.get_all(sort_by: ["Lng"], order: :desc) |> Enum.map(&(&1["Lng"])) == [9, 7, 5, -2]
+    end
+
+    test "should sort asc if unknown order is passed" do
+      assert Players.get_all(sort_by: ["Lng"], order: :bla) |> Enum.map(&(&1["Lng"])) == [-2, 5, 7, 9]
+    end
   end
 end

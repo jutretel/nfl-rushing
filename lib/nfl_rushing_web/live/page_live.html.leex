@@ -4,13 +4,14 @@
     </div>
 
     <div class="mb-4">
-        <div class="grid grid-cols-12 gap-1 uppercase text-gray-700 text-xs font-bold">
-            <p class="px-1 md:col-start-2 md:col-span-4 col-span-5">Search by</p>
+        <div class="grid grid-cols-12 gap-1 uppercase text-gray-700 md:text-xs text-tiny font-bold">
+            <p class="px-1 md:col-start-2 md:col-span-3 col-span-4">Search by</p>
             <p class="px-1 md:col-span-4 col-span-5">Sort by</p>
+            <p class="col-span-1"></p>
             <p class="px-1 md:col-span-1 col-span-2">Show per page</p>
         </div>
         <form phx-submit="search" class="grid grid-cols-12 gap-1">
-            <input value="<%= @user_options.player %>" autocomplete="off" name="player" type="text" class="px-4 py-2 border rounded md:col-start-2 md:col-span-4 col-span-5 focus:border-gray-500 focus:outline-none" placeholder="Search by player's name...">
+            <input value="<%= @user_options.player %>" autocomplete="off" name="player" type="text" class="px-4 py-2 border rounded md:col-start-2 md:col-span-3 col-span-4 focus:border-gray-500 focus:outline-none" placeholder="Search by player's name...">
             <div class="relative md:col-span-4 col-span-5">
                 <select name="sort_by" class="appearance-none w-full border py-3 px-4 pr-8 rounded focus:outline-none focus:border-gray-500">
                     <%= options_for_select(@sort_options, @user_options.sort_by) %>
@@ -18,6 +19,11 @@
                 <div class="absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
                     <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
                 </div>
+            </div>
+            <div class="col-span-1">
+                <select name="order" class="appearance-none w-full border py-3 md:px-4 px-2 rounded focus:outline-none focus:border-gray-500">
+                    <%= options_for_select(@order_options, @user_options.order) %>
+                </select>
             </div>
             <div class="col-span-1">
                 <select name="page_size" class="appearance-none w-full border py-3 md:px-4 px-2 rounded focus:outline-none focus:border-gray-500">
