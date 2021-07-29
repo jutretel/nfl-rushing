@@ -8,7 +8,8 @@ defmodule NflRushing.Application do
   def start(_type, _args) do
     children = [
       {Phoenix.PubSub, name: NflRushing.PubSub},
-      NflRushingWeb.Endpoint
+      NflRushingWeb.Endpoint,
+      NflRushing.DownloadService,
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

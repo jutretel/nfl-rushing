@@ -38,7 +38,9 @@ defmodule NflRushing.MixProject do
       {:phoenix_html, "~> 2.11"},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
       {:jason, "~> 1.0"},
-      {:plug_cowboy, "~> 2.0"}
+      {:plug_cowboy, "~> 2.0"},
+      {:csv, "~> 2.4"},
+
     ]
   end
 end

@@ -10,3 +10,4 @@ config :nfl_rushing, NflRushingWeb.Endpoint,
 config :logger, level: :warn
 
 config :nfl_rushing, :data_source_path, "test/support/files/rushing.json"
+config :nfl_rushing, :download_path, "test/support/files/"

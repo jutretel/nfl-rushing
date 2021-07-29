@@ -8,8 +8,13 @@ defmodule NflRushingWeb.Players do
 
   @order_options [:asc, :desc]
 
+  @json_keys [
+    "Player", "Team", "Pos", "Att/G", "Att", "Yds", "Avg", "Yds/G", "TD", "Lng", "1st", "1st%", "20+", "40+", "FUM",
+  ]
+
   def sort_options(), do: @sort_options
   def order_options(), do: @order_options
+  def get_csv_header(), do: @json_keys
 
   @doc """
   Get all players matching the given criteria.

@@ -8,9 +8,8 @@ defmodule NflRushingWeb.PageLive do
     sort_options = Players.sort_options()
     order_options = Players.order_options()
 
-    socket = assign(socket, sort_options: sort_options, order_options: order_options)
-
-    {:ok, socket, temporary_assigns: [players: []]}
+    socket = assign(socket, sort_options: sort_options, order_options: order_options, loading: false)
+    {:ok, socket}
   end
 
   def handle_params(params, _url, socket) do
@@ -34,6 +33,32 @@ defmodule NflRushingWeb.PageLive do
 
   def handle_event("search", %{"player" => player, "sort_by" => sort_by, "page_size" => page_size, "order" => order}, socket) do
     socket = push_patch(socket, to: Routes.live_path(socket, __MODULE__, page: 1, page_size: page_size, player: player, sort_by: sort_by, order: order))
+
+    {:noreply, socket}
+  end
+
+  def handle_event("download", _params, socket) do
+    content = socket.assigns.players
+    headers = Players.get_csv_header()
+
+    NflRushing.DownloadService.save_file_for_process(self(), content, headers)
+
+    socket = assign(socket, loading: true)
+
+    {:noreply, socket}
+  end
+
+  def handle_info({:download, {:ok, %{filename: filename}}}, socket) do
+    socket =
+      assign(socket, loading: false)
+      |> push_event("download", %{url: Routes.page_path(socket, :download, filename)})
+
+    {:noreply, socket}
+  end
+  def handle_info({:download, {:error, %{message: message}}}, socket) do
+    socket =
+      assign(socket, loading: false)
+      |> put_flash(:error, "Something went wrong while trying to download your file: #{message}")
 
     {:noreply, socket}
   end
