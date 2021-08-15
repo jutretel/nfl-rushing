@@ -55,15 +55,31 @@ If you have any questions regarding requirements, do not hesitate to email your 
 
 ### Installation and running this solution
 
-#### Initial configuration (Mac users)
+#### Running with Docker
 
-* `brew install elixir`
-* `brew install node`
+1. First, you'll need to install [Docker](https://docs.docker.com/get-docker/).
+2. Then, inside the `nfl-rushing` directory, run `make init`
+3. Wait until all the dependencies to be ready (you should see an info log after `STARTING SERVER`)
+4. Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
 
-To start your Phoenix server:
+Some other useful commands:
 
-* Install dependencies with `mix deps.get`
-* Install Node.js dependencies with `npm install` inside the `assets` directory
-* Start Phoenix endpoint with `mix phx.server`
+* Stop and remove the container: `make down`
+* Stop the container: `make stop`
+* Enter the container's bash: `make bash`
+* You can reenter the container's logs with `make logs`
 
-Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
+Also, inside the containers bash you may run:
+
+* `nfl_console` to access the phoenix server running
+* `nfl_tests` to run tests
+
+#### Running on Mac
+
+1. Install elixir: `brew install elixir`
+2. Install node: `brew install node`
+3. Install dependencies with `mix deps.get`
+4. Install Node.js dependencies with `npm install` inside the `assets` directory
+5. Start Phoenix endpoint and enter the iex console with `iex -S mix phx.server`
+6. Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
+7. `mix test` to run tests

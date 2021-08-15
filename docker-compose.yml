@@ -1,0 +1,13 @@
+services:
+  nfl_rushing:
+    build:
+      context: .
+    ports:
+      - "4000:4000"
+    working_dir: /nfl
+    volumes:
+      - .:/nfl
+    environment:
+      MIX_ENV: dev
+      PORT: 4000
+      HOSTNAME: localhost
