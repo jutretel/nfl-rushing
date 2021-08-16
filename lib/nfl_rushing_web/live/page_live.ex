@@ -26,7 +26,7 @@ defmodule NflRushingWeb.PageLive do
     players_page = players |> Paginate.paginate(page_number: page, page_size: page_size)
     total_pages = players |> Paginate.total_pages(page_size)
 
-    socket = assign(socket, players: players_page, total_pages: total_pages, user_options: user_options)
+    socket = assign(socket, all_players: players, players: players_page, total_pages: total_pages, user_options: user_options)
 
     {:noreply, socket}
   end
@@ -38,7 +38,7 @@ defmodule NflRushingWeb.PageLive do
   end
 
   def handle_event("download", _params, socket) do
-    content = socket.assigns.players
+    content = socket.assigns.all_players
     headers = Players.get_csv_header()
 
     NflRushing.DownloadService.save_file_for_process(self(), content, headers)
