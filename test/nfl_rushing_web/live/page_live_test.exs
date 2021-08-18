@@ -44,6 +44,22 @@ defmodule NflRushingWeb.PageLiveTest do
     assert expected_content == actual_content
   end
 
+  test "pagination should keep search params", %{conn: conn} do
+    {:ok, page_live, disconnected_html} = live(conn, "/")
+
+    assert disconnected_html =~ "Joe Banyard"
+
+    render_submit(page_live, :search, %{"player" => "shaun", "sort_by" => "", "page_size" => "10", "order" => "asc"})
+
+    connected_html =
+      page_live
+      |> element("#lower_page_next")
+      |> render_click()
+
+    assert connected_html =~ "Shaun Hill"
+    refute connected_html =~ "Joe Banyard"
+  end
+
   setup do
     temp_path = Application.get_env(:nfl_rushing, :download_path)
     Application.put_env(:nfl_rushing, :download_path, System.tmp_dir!)

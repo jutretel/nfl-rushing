@@ -63,8 +63,8 @@ defmodule NflRushingWeb.PageLive do
     {:noreply, socket}
   end
 
-  defp pagination_link(socket, btn_text, btn_class, page, page_size) do
-    route = Routes.live_path(socket, __MODULE__, page: page, page_size: page_size)
-    live_patch(btn_text, to: route, class: btn_class)
+  defp pagination_link(socket, btn_text, btn_id, btn_class, page, %{page_size: page_size, player: player, sort_by: sort_by, order: order}) do
+    route = Routes.live_path(socket, __MODULE__, page: page, page_size: page_size, player: player, sort_by: sort_by, order: order)
+    live_patch(btn_text, to: route, class: btn_class, id: btn_id)
   end
 end

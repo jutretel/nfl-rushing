@@ -49,11 +49,11 @@
             </form>
         </div>
         <div class="xl:col-start-11 xl:col-span-1 md:col-start-10 md:col-span-2 px-2 py-1 col-start-9 col-span-4 grid grid-cols-7 gap-1 bg-yellow-400 rounded text-white font-extralight">
-            <%= pagination_link @socket, "←", "col-span-1 text-center text-sm #{(if @user_options.page == 1, do: "cursor-not-allowed")}", max(@user_options.page - 1, 1), @user_options.page_size %>
+            <%= pagination_link @socket, "←", "upper_page_back", "col-span-1 text-center text-sm #{(if @user_options.page == 1, do: "cursor-not-allowed")}", max(@user_options.page - 1, 1), @user_options %>
             <%= for page <- (@user_options.page - 2)..(@user_options.page + 2), page > 0 and page <= @total_pages do %>
-            <%= pagination_link @socket, page, "col-span-1 text-center text-sm #{(if page == @user_options.page, do: "font-bold")}", page, @user_options.page_size %>
+            <%= pagination_link @socket, page, "upper_page_#{page}", "col-span-1 text-center text-sm #{(if page == @user_options.page, do: "font-bold")}", page, @user_options %>
             <% end %>
-            <%= pagination_link @socket, "→", "col-span-1 text-center text-sm #{(if @user_options.page == @total_pages, do: "cursor-not-allowed")}", min(@user_options.page + 1, @total_pages), @user_options.page_size %>
+            <%= pagination_link @socket, "→", "upper_page_next", "col-span-1 text-center text-sm #{(if @user_options.page == @total_pages, do: "cursor-not-allowed")}", min(@user_options.page + 1, @total_pages), @user_options %>
         </div>
     </div>
 
@@ -132,11 +132,11 @@
 
     <div class="mb-4 grid grid-cols-12">
         <div class="xl:col-start-11 xl:col-span-1 md:col-start-10 md:col-span-2 px-2 py-1 col-start-9 col-span-4 grid grid-cols-7 gap-1 bg-yellow-400 rounded text-white font-extralight">
-            <%= pagination_link @socket, "←", "col-span-1 text-center text-sm #{(if @user_options.page == 1, do: "cursor-not-allowed")}", max(@user_options.page - 1, 1), @user_options.page_size %>
+            <%= pagination_link @socket, "←", "lower_page_back", "col-span-1 text-center text-sm #{(if @user_options.page == 1, do: "cursor-not-allowed")}", max(@user_options.page - 1, 1), @user_options %>
             <%= for page <- (@user_options.page - 2)..(@user_options.page + 2), page > 0 and page <= @total_pages do %>
-            <%= pagination_link @socket, page, "col-span-1 text-center text-sm #{(if page == @user_options.page, do: "font-bold")}", page, @user_options.page_size %>
+            <%= pagination_link @socket, page, "lower_page_#{page}",  "col-span-1 text-center text-sm #{(if page == @user_options.page, do: "font-bold")}", page, @user_options %>
             <% end %>
-            <%= pagination_link @socket, "→", "col-span-1 text-center text-sm #{(if @user_options.page == @total_pages, do: "cursor-not-allowed")}", min(@user_options.page + 1, @total_pages), @user_options.page_size %>
+            <%= pagination_link @socket, "→", "lower_page_next", "col-span-1 text-center text-sm #{(if @user_options.page == @total_pages, do: "cursor-not-allowed")}", min(@user_options.page + 1, @total_pages), @user_options %>
         </div>
     </div>
 </div>
