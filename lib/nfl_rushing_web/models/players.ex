@@ -61,6 +61,8 @@ defmodule NflRushingWeb.Players do
     rush_info = %{
       "Lng" => longest_rush_to_int(player["Lng"]),
       "TLng" => longest_rush_touchdown(player["Lng"]),
+      "Yds" => field_to_int(player["Yds"]),
+      "TD" => field_to_int(player["TD"]),
     }
 
     Map.merge(player, rush_info)
@@ -71,4 +73,8 @@ defmodule NflRushingWeb.Players do
 
   defp longest_rush_touchdown(longest_rush) when is_binary(longest_rush), do: longest_rush |> String.contains?("T")
   defp longest_rush_touchdown(_longest_rush), do: false
+
+  defp field_to_int(field) when is_binary(field), do: field |> String.replace(",", "") |> String.to_integer
+  defp field_to_int(field) when is_integer(field), do: field
+  defp field_to_int(_), do: raise "Field should be integer"
 end

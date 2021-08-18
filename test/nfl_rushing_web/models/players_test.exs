@@ -24,6 +24,13 @@ defmodule NflRushingWeb.PlayersTest do
 
       assert result == [5, 7]
     end
+
+    test "should return longest rushing yards as integer" do
+      Players.get_all()
+      |> Enum.each(fn player ->
+        assert player["Yds"] |> is_integer()
+      end)
+    end
   end
 
   describe "searching by name" do
@@ -46,7 +53,7 @@ defmodule NflRushingWeb.PlayersTest do
 
   describe "sorting by" do
     test "should sort by total rushing yards" do
-      assert Players.get_all(sort_by: ["Yds"]) |> Enum.map(&(&1["Yds"])) == [2, 5, 7, 7]
+      assert Players.get_all(sort_by: ["Yds"]) |> Enum.map(&(&1["Yds"])) == [2, 5, 7, 7124]
     end
 
     test "should sort by longest rush" do
